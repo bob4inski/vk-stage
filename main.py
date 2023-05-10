@@ -1,5 +1,5 @@
 import logging
-import logger
+import  asyncio 
 import pandas as pd
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils import executor
@@ -14,11 +14,9 @@ from bot.handlers.get import  register_get
 from bot.handlers.help import  register_help
 from bot.handlers.del_all import register_del_all
 from bot.handlers.del_one import register_del_one
-
 from bot.bd.connet import get_pg_connection
-# from aiogram.dispatcher.webhook import SendMessage, DeleteMessage
 
-# import  asyncio 
+
 
 API_TOKEN = '6153330849:AAFHgaZ6cQQQSuF4Io7u0_3c7HXobSQbFvI'
 
@@ -59,7 +57,6 @@ button1 = KeyboardButton('/start')
 button2 = KeyboardButton('/help')
 button3 = KeyboardButton('/set')
 button4 = KeyboardButton('/get')
-# button5 = KeyboardButton('/list')
 button6 = KeyboardButton('/del_all')
 button7 = KeyboardButton('/del_one')
 
@@ -95,20 +92,21 @@ async def process_callback_item(callback_query: types.CallbackQuery):
 async def process_callback_get(callback_query: types.CallbackQuery):
     # Получаем значение элемента из callback_data
     item = callback_query.data.split('_')[1]
-    query = "select login, password from users where telegram_id = %s and service = %s"
+    query = "select service, login, password from users where telegram_id = %s and service = %s"
     params = (callback_query.from_user.id, item)
     try:
 
         with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
             df = pd.read_sql_query(query, pg_conn,params=params)
             if len(df):
-                await bot.send_message(callback_query.from_user.id,df.to_string(index=False))
+                delete_msg = await bot.send_message(callback_query.from_user.id,df.to_string(index=False))
+                await asyncio.sleep(60)
+                await delete_msg.delete()
             else:
                 await bot.send_message(callback_query.from_user.id,'у вас нет сохранненых паролей для этого сервиса')
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await bot.send_message(callback_query.from_user.id,'Какая то ошибка произошла')
-    # Отправляем сообщение с выбранным элементом
 
 
 if __name__ == '__main__':

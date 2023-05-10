@@ -17,7 +17,6 @@ class MyStates(StatesGroup):
 
 async def get(message: types.Message):
     await message.answer('Сейчас выведу список сервисов, которые вы записывали')
-    # Устанавливаем состояние пользователя в 'wait_data'
     query = f'select service from users where telegram_id = {message.from_user.id}'
     try:
 
@@ -29,7 +28,7 @@ async def get(message: types.Message):
                 service_name = row['service']
                 services.append(service_name)  
         if len(services):
-            await message.answer("Выберите сервис,данные которого вы хотите посмотреть:", reply_markup=get_keyboard(services))
+            await message.answer("Выберите сервис,данные которого вы хотите посмотреть:(через минуту сообщение с паролем удалится)", reply_markup=get_keyboard(services))
         else:
             await message.answer("У вас нет сохраненных паролей")
         # result = json.dumps(rows,default=vars,ensure_ascii=False, indent = 2)

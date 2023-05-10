@@ -5,11 +5,8 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from bot.bd.connet import get_pg_connection
-
+import asyncio
 import logging
-
-
-
 
 
 class MyStates(StatesGroup):
@@ -29,8 +26,8 @@ async def set(message: types.Message):
 
 async def process_data_set(message: types.Message, state: FSMContext):
     # Получаем данные из сообщения
-    data = message.text
-    splited = data.split()
+    del_msg = message #записываем сообщение в переменную чтобы удалить 
+    splited = del_msg.text.split()
     a = message.from_user.id
     try:
         query = f"""
@@ -40,11 +37,16 @@ async def process_data_set(message: types.Message, state: FSMContext):
         """
         with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
             cur.execute(query, (a,splited[0],splited[1],splited[2]))
+
         await message.answer('Успешно записали данные')
+       
+
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
-        
+    await asyncio.sleep(5)
+    await del_msg.delete() # удаляем сообщение пользователя   
+     
     await state.finish()
 
 
