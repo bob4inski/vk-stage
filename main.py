@@ -53,22 +53,22 @@ register_all_handlers(dp)
 
 # Создаем кнопки для меню
 
-button1 = KeyboardButton('/start')
-button2 = KeyboardButton('/help')
-button3 = KeyboardButton('/set')
-button4 = KeyboardButton('/get')
-button6 = KeyboardButton('/del_all')
-button7 = KeyboardButton('/del_one')
+# button1 = KeyboardButton('/start')
+# button2 = KeyboardButton('/help')
+# button3 = KeyboardButton('/set')
+# button4 = KeyboardButton('/get')
+# button6 = KeyboardButton('/del_all')
+# button7 = KeyboardButton('/del_one')
 
 
-# Создаем меню и добавляем кнопки
-menu = ReplyKeyboardMarkup([[button1,button2],[button3,button4],[button6,button7]],resize_keyboard=True,row_width=2)
+# # Создаем меню и добавляем кнопки
+# menu = ReplyKeyboardMarkup([[button1,button2],[button3,button4],[button6,button7]],resize_keyboard=True,row_width=2)
 
-# Отправляем меню пользователю
-@dp.message_handler(commands=['menu'])
-async def start_command(message: types.Message):
-    # Отправляем приветственное сообщение
-    await bot.send_message(message.chat.id, 'Выберите команду:', reply_markup=menu)
+# # Отправляем меню пользователю
+# @dp.message_handler(commands=['menu'])
+# async def start_command(message: types.Message):
+#     # Отправляем приветственное сообщение
+#     await bot.send_message(message.chat.id, 'Выберите команду:', reply_markup=menu)
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('item_'))
 async def process_callback_item(callback_query: types.CallbackQuery):

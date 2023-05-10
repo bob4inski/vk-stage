@@ -45,12 +45,13 @@ async def del_one(message: types.Message):
                 services.append(service)
 
         del_msg_from_del_one = await message.answer("Выберите запись которую вы хотите удалить:", reply_markup=keyboard(services))
-        await asyncio.sleep(360) # так ка
-        await del_msg_from_del_one.delete()     
+           
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
 
+    await asyncio.sleep(360) # так как тут выводятся пароли в открытом виде, то нужно будет сообщение удалить
+    await del_msg_from_del_one.delete()  
 
 # async def process_data_del_one(message: types.Message, state: FSMContext):
 #     # Получаем данные из сообщения

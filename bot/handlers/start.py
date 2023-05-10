@@ -12,14 +12,7 @@ async def start(message: types.Message):
     # Отправляем приветственное сообщение
     await message.answer('Привет! Я бот.')
     await message.answer('Вся справка есть в команде /help')
-    # await message.answer('А сейчас предлагаю придумать пароль для удаления и изменения паролей')
 
-    # await MyStates_start.wait_data.set()
-
-# async def process_data_set(message: types.Message, state: FSMContext):
-#     data = message.text
-#     query = "insert into client(id,password) values (%s,%s)"
-#     params = (message.from_user.id, data)
 
     
     
@@ -28,4 +21,3 @@ async def start(message: types.Message):
 
 def register_start(dp: Dispatcher):
     dp.register_message_handler(start, Command(['start']))
-    # dp.register_message_handler(process_data_set, state=MyStates_start.wait_data)
