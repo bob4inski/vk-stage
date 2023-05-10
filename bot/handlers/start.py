@@ -10,8 +10,9 @@ class MyStates_start(StatesGroup):
 
 async def start(message: types.Message):
     # Отправляем приветственное сообщение
-    await message.answer('Привет! Я бот.')
+    await message.answer('Привет! Я бот, который умеет хранить пароли.')
     await message.answer('Вся справка есть в команде /help')
+    await message.answer('А еще через какое-то время все сообщения с паролями удаляются, не пугайтесь')
 
 
     
