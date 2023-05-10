@@ -44,7 +44,7 @@ async def process_data_set(message: types.Message, state: FSMContext):
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
-    await asyncio.sleep(5)
+    await asyncio.sleep(120)
     await del_msg.delete() # удаляем сообщение пользователя   
      
     await state.finish()

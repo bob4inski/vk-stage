@@ -87,12 +87,31 @@ async def process_callback_item(callback_query: types.CallbackQuery):
     if answer:
         await bot.send_message(callback_query.from_user.id, f"Успешно удалены данные для сервиса {item}")
 
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('itemdel_'))
+async def process_callback_delete(callback_query: types.CallbackQuery):
+    # Получаем значение элемента из callback_data
+    service = callback_query.data.split('_')[1]
+    login = callback_query.data.split('_')[2]
+    password = callback_query.data.split('_')[3]
+    # Отправляем сообщение с выбранным элементом,
+    query = "DELETE FROM users WHERE telegram_id = %s and  service = %s  and login = %s and password = %s;"
+    params = (callback_query.from_user.id, service,login,password)
+    try:
+        with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
+            cur.execute(query, params)
+        answer = True
+    except Exception as ex:
+        logging.error(repr(ex), exc_info=True)
+        await  bot.send_message(callback_query.from_user.id, f"Произошла ошибка")
+    if answer:
+        await bot.send_message(callback_query.from_user.id, f"Успешно удалена запись")
+        
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('itemget_'))
 async def process_callback_get(callback_query: types.CallbackQuery):
     # Получаем значение элемента из callback_data
     item = callback_query.data.split('_')[1]
-    query = "select service, login, password from users where telegram_id = %s and service = %s"
+    query = "select service, login, password from users where telegram_id = %s and service = %s " 
     params = (callback_query.from_user.id, item)
     try:
 
