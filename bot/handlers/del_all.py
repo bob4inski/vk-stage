@@ -5,12 +5,8 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 import logging
 
-
 from bot.bd.connet import get_pg_connection
 from bot.buttons.del_menu import keyboard
-
-
-
 
 class MyStates_del_all(StatesGroup):
     wait_data = State()
@@ -37,10 +33,6 @@ async def del_all(message: types.Message):
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
         
-
-
-
-
 def register_del_all(dp: Dispatcher):
     dp.register_message_handler(del_all, Command(['del_all']))
    

@@ -14,11 +14,5 @@ async def start(message: types.Message):
     await message.answer('Вся справка есть в команде /help')
     await message.answer('А еще через какое-то время все сообщения с паролями удаляются, не пугайтесь')
 
-
-    
-    
-
-
-
 def register_start(dp: Dispatcher):
     dp.register_message_handler(start, Command(['start']))

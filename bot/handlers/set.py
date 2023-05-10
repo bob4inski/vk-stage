@@ -43,14 +43,12 @@ async def process_data_set(message: types.Message, state: FSMContext):
 
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
-        await message.answer('Произошла какая-то ошибка ')
+        await message.answer('Произошла какая-то ошибка при записи данных')
         await state.finish() 
     await asyncio.sleep(15)
     await del_msg_from_set.delete() # удаляем сообщение пользователя   
      
     
-
-
 def register_set(dp: Dispatcher):
     dp.register_message_handler(set, Command(['set']))
     dp.register_message_handler(process_data_set, state=MyStates.wait_data)
