@@ -83,7 +83,7 @@ async def process_callback_item(callback_query: types.CallbackQuery):
         answer = True
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
-        await  bot.send_message(callback_query.from_user.id, f"Произошла ошибка")
+        await  bot.send_message(callback_query.from_user.id, f"Произошла ошибка при удалении данных сервиса")
     if answer:
         await bot.send_message(callback_query.from_user.id, f"Успешно удалены данные для сервиса {item}")
 
@@ -102,7 +102,7 @@ async def process_callback_delete(callback_query: types.CallbackQuery):
         answer = True
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
-        await  bot.send_message(callback_query.from_user.id, f"Произошла ошибка")
+        await  bot.send_message(callback_query.from_user.id, f"Произошла ошибка при удалении  одной записи")
     if answer:
         await bot.send_message(callback_query.from_user.id, f"Успешно удалена запись")
         

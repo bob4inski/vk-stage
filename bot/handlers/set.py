@@ -26,8 +26,8 @@ async def set(message: types.Message):
 
 async def process_data_set(message: types.Message, state: FSMContext):
     # Получаем данные из сообщения
-    del_msg = message #записываем сообщение в переменную чтобы удалить 
-    splited = del_msg.text.split()
+    del_msg_from_set = message #записываем сообщение в переменную чтобы удалить 
+    splited = message.text.split()
     a = message.from_user.id
     try:
         query = f"""
@@ -39,15 +39,16 @@ async def process_data_set(message: types.Message, state: FSMContext):
             cur.execute(query, (a,splited[0],splited[1],splited[2]))
 
         await message.answer('Успешно записали данные')
-       
+        await state.finish() 
 
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
-        await message.answer('Произошла какая-то ошибка')
-    await asyncio.sleep(120)
-    await del_msg.delete() # удаляем сообщение пользователя   
+        await message.answer('Произошла какая-то ошибка ')
+        await state.finish() 
+    await asyncio.sleep(15)
+    await del_msg_from_set.delete() # удаляем сообщение пользователя   
      
-    await state.finish()
+    
 
 
 def register_set(dp: Dispatcher):
