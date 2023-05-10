@@ -1,9 +1,9 @@
-# vk-stage
-для запуска нужно скопировать этот репозиторий
+# VK-internship
+Скопируйте репозиторий с помощью команды
 ```
 git clone https://github.com/bob4inski/vk-stage.git
 ```
-Далее создать в загруженной папке файл `.env`
+В загруженной папке создайте файл `.env` со следующим содержанием 
 ```
 BOT_NAME=vk-project # Constant to set the name of the directory in the container
 BOT_CONTAINER_NAME=vk # Constant to set the name of the bot container
@@ -20,31 +20,35 @@ DATABASE_HOST=vk_DB # Set database service name from docker-compose or localhost
 
 ```
 # Далее 2 варианта 
-1. docker-compose 
-2. руками поднять 
+1. Запуск с помощью docker-compose 
+2. Запуск вручную
 
 ## Через docker-compose все просто
 
-заходим в папку и пишем ```docker-compose up``` 
+В загруженной папке пропишите ```docker-compose up``` 
 
 
 
 ## А руками немного сложнее
 
-подгружаем все зависимости
+## 1. Подгрузить зависимости с помощью команды
 
 ```
 pip install -r rerequirements.txt
 ```
 
-## запускаем бд, с которой будет общаться бот 
-
-docker run --name postgres_db2022 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 44444:5432 -d postgres
-
-## также нужно при первом запуске postgres создать базу данных
+## 2. Запустить БД с помощью команды  
 
 ```
-create table clients
+docker run --name postgres_vk -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 44444:5432 -d postgres
+```
+такие переменные как name, postgres_user, postgres_password и порт работы бд (в примере это 44444) можно исполтзовать свои, главное не забыть поменять их d `.env`
+
+## 3. При первом запуске postgres создать таблицу, в которой будет хранится информация пользователй 
+
+
+```
+create table users
 (
     telegram_id       int,
   	service text,
@@ -52,9 +56,9 @@ create table clients
   	password text
 );
 ```
-p.s да хранить пароли в открытом виде нельзя, но это можно исправить
+p.s да хранить пароли в открытом виде нельзя и очень плохо, но это можно исправить
 
-## последний пункт - запуск бота
+## 4. Запустить бота с помощью команды
 
 ```
 python3 main.py
