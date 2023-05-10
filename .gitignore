@@ -1,1 +1,5 @@
 ./bot/handlers/trash/
+venv/
+__pycache__/
+.idea/
+data/
