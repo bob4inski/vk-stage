@@ -16,9 +16,9 @@ class MyStates(StatesGroup):
 async def set(message: types.Message):
    
     text = [
-        "Введите через двоеточие сервис, логин и пароль от которого выхотите сохранить",
+        "Введите через пробел сервис, логин и пароль от которого выхотите сохранить",
         "К примеру вот так",
-        "```telegram bob4inski 47856434```"
+        "telegram bob4inski 47856434"
     ]
     await message.answer('\n'.join(text))
     await MyStates.wait_data.set()

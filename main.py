@@ -91,7 +91,7 @@ async def process_callback_item(callback_query: types.CallbackQuery):
 async def process_callback_delete(callback_query: types.CallbackQuery):
     # Получаем значение элемента из callback_data
     service = callback_query.data.split('_')[1]
-    login = callback_query.data.split('_')[2]
+    login = callback_query.data.split('_')[2] 
     password = callback_query.data.split('_')[3]
     # Отправляем сообщение с выбранным элементом,
     query = "DELETE FROM users WHERE telegram_id = %s and  service = %s  and login = %s and password = %s;"
