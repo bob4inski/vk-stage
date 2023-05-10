@@ -6,6 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from bot.bd.connet import get_pg_connection
+
 import pandas as pd
 import logging
 
@@ -24,11 +25,15 @@ async def list(message: types.Message):
         with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
                 # cur.execute(query)
                 # rows = cur.fetchall()
-            df = pd.read_sql_query(query, pg_conn)
+            df = pd.read_sql_query(query, pg_conn)    
+            if len(df):
+                await message.answer(df.to_string(index=False))
+            else:
+                await message.answer('у вас нет сохранненых паролей')    
+           
 
         # result = json.dumps(rows,default=vars,ensure_ascii=False, indent = 2)
         
-        await message.answer(df.to_string(index=True))
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')

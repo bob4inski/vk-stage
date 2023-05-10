@@ -1,52 +1,45 @@
 
-from aiogram import  Dispatcher, types
+from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Command
 from bot.bd.connet import get_pg_connection
+from bot.buttons.get_menu import get_keyboard
 import logging
-import pandas as pd
 
 
 
-
-
-class MyStates_get(StatesGroup):
+class MyStates(StatesGroup):
     wait_data = State()
 
 
 async def get(message: types.Message):
-   
-    text = [
-        "Введите название сервиса от которого хотите получить log pass",
-        "К примеру вот так",
-        "telegram",
-        "если не помнишь какие сохранял, то можно использовать команду /list"
-    ]
-    await message.answer('\n'.join(text))
-    await MyStates_get.wait_data.set()
-
-
-async def process_data_get(message: types.Message, state: FSMContext):
-    # Получаем данные из сообщения
-    data = message.text
-    query = "select login, password from users where telegram_id = %s and service = %s"
-    params = (message.from_user.id, data)
+    await message.answer('Сейчас выведу список сервисов, которые вы записывали')
+    # Устанавливаем состояние пользователя в 'wait_data'
+    query = f'select service from users where telegram_id = {message.from_user.id}'
     try:
 
         with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
-            df = pd.read_sql_query(query, pg_conn,params=params)
-            if len(df):
-                await message.answer(df.to_string(index=False))
-            else:
-                await message.answer('у вас нет сохранненых паролей для этого сервиса')
+            cur.execute(query)
+            rows = cur.fetchall()
+            services = []
+            for row in rows:
+                service_name = row['service']
+                services.append(service_name)  
+        if len(services):
+            await message.answer("Выберите сервис,данные которого вы хотите посмотреть:", reply_markup=get_keyboard(services))
+        else:
+            await message.answer("У вас нет сохраненных паролей")
+        # result = json.dumps(rows,default=vars,ensure_ascii=False, indent = 2)
+        
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
-    await state.finish()
-
+        
 
 def register_get(dp: Dispatcher):
     dp.register_message_handler(get, Command(['get']))
-    dp.register_message_handler(process_data_get, state=MyStates_get.wait_data)
+
+   

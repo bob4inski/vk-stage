@@ -40,12 +40,11 @@ async def process_data_set(message: types.Message, state: FSMContext):
         """
         with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
             cur.execute(query, (a,splited[0],splited[1],splited[2]))
+        await message.answer('Успешно записали данные')
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
-
-    # await message.answer(data)
-    # Сбрасываем состояние пользователя
+        
     await state.finish()
 
 

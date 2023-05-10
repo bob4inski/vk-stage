@@ -36,15 +36,14 @@ async def process_data_del_one(message: types.Message, state: FSMContext):
     try:
         with get_pg_connection() as pg_conn, pg_conn.cursor() as cur:
             cur.execute(query, params)
-        answer = True      
+        await message.answer("данные были успешно удалены") 
     except Exception as ex:
         logging.error(repr(ex), exc_info=True)
         await message.answer('Произошла какая-то ошибка')
-    if answer:
-        await message.answer("данные были успешно удалены")
+        
     await state.finish()
 
 
-def register_dell_one(dp: Dispatcher):
+def register_del_one(dp: Dispatcher):
     dp.register_message_handler(del_one, Command(['del_one']))
     dp.register_message_handler(process_data_del_one, state=MyStates_del_one.wait_data)
