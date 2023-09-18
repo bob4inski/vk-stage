@@ -9,7 +9,7 @@ BOT_NAME=vk-project # Constant to set the name of the directory in the container
 BOT_CONTAINER_NAME=vk # Constant to set the name of the bot container
 BOT_IMAGE_NAME=vk-image # Constant to set the name of the bot image
 
-BOT_TOKEN=6153330849:AAFHgaZ6cQQQSuF4Io7u0_3c7HXobSQbFvI # Constant to set the token of the bot from @BotFather
+BOT_TOKEN=<token> # Constant to set the token of the bot from @BotFather
 USE_REDIS=TRUE # Constant to set a boolean value to use Redis
 
 DATABASE_NAME=postgres # Constant to set name of the database
